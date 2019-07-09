@@ -1,6 +1,5 @@
 import gym
 
-import random
 import numpy as np
 import keras
 from keras import backend
@@ -42,7 +41,7 @@ def genTrainingData(env, min_score, train_episodes_n, train_obs_n=500):
         score = 0
 
         for _ in range(train_obs_n):
-            action = random.randrange(0, 2)
+            action = env.action_space.sample()
             new_state, reward, done, _ = env.step(action)
 
             X_tmp.append(prev_state)
@@ -66,7 +65,7 @@ def genTrainingData(env, min_score, train_episodes_n, train_obs_n=500):
     print('Shape of X:', X.shape)
     print('Shape of target:', Y.shape)
 
-def play(model):
+def play(env, model):
     episodes_n = 10
     min_score = 1000000
     max_score = -1
@@ -113,4 +112,4 @@ if __name__ == '__main__':
 
     model = createModel()
     trained_model = trainModel(model, train_data, checkpoint)
-    play(trained_model)
+    play(env, trained_model)
